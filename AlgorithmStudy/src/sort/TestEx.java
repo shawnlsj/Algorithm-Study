@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 public class TestEx {
 	public static void main(String[] args) {
-		int[] a= makingIntArr();
+	//	int[] a= makingIntArr();
+		int[] a = {};
 		quickSort(a);
 		System.out.println(Arrays.toString(a));
 	}

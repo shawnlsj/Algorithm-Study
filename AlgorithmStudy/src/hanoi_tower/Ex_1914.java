@@ -10,10 +10,13 @@ public class Ex_1914 {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
+
 		if(n<=20) isTwenty = true;
+
 		double start = System.currentTimeMillis();
 		hanoi2(n,1,2,3);
 		System.out.println(System.currentTimeMillis()-start);
+
 		System.out.println(count);
 		hanoi(n,1,2,3);
 	}
