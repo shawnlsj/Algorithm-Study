@@ -2,7 +2,7 @@ package sort;
 
 import java.util.Arrays;
 
-public class QuickSort {
+public class QuickSort_v1 {
 
 	public static void main(String[] args) {
 		int[] a = makingIntArr();
@@ -38,10 +38,10 @@ public class QuickSort {
 		int i = start;
 		int j = end;
 		int tmp = 0;
-		//엇갈릴 때까지 반복
+
 		
 			while(i<j) {
-				//피벗보다 큰 요소를 찾을 때까지 반복
+
 				while(arr[i]<=pivot && i<=end) {
 					i++;
 						if(i>end) {
