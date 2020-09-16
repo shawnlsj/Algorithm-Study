@@ -4,56 +4,31 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class PriorityQueueDijkstra {
+public class Ch9_3 {
+
     private static final int INF = (int) 1e9;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer stk = new StringTokenizer(br.readLine(), " ");
-        int kindOfNode = Integer.parseInt(stk.nextToken()); //노드의 종류
-        int NumOfEdge = Integer.parseInt(stk.nextToken()); // 간선의 개수
 
-        int startNode = Integer.parseInt(br.readLine()); // 시작 노드
+        int numNode = Integer.parseInt(stk.nextToken());
+        int numEdge = Integer.parseInt(stk.nextToken());
+        int startNode = Integer.parseInt(stk.nextToken());
 
-        Graph graph = new Graph(kindOfNode);
+        Graph graph = new Graph(numNode);
 
-        //node 노드 번호
-        //targetNode 목표 노드 번호
-        //distance 목표 노드까지의 거리
-        for (int i = 0; i < NumOfEdge; i++) {
+        for (int i = 0; i < numEdge; i++) {
             StringTokenizer stk2 = new StringTokenizer(br.readLine(), " ");
-            int node = Integer.parseInt(stk2.nextToken());
+            int nodeNum = Integer.parseInt(stk2.nextToken());
             int targetNode = Integer.parseInt(stk2.nextToken());
-            int distance = Integer.parseInt(stk2.nextToken());
-
-            graph.add(node, targetNode, distance);
+            int cost = Integer.parseInt(stk2.nextToken());
+            graph.add(nodeNum, targetNode, cost);
         }
+
         dijkstra(graph, startNode);
-    }
 
-    static class Graph {
 
-        //바깥의 ArrayList의 크기는 노드의 개수 + 1 이다
-        //예를들면 노드가 1번~6번까지 있으면 ArrayList 크기는 7이 된다
-        //안쪽의 LinkedList 에는 해당 노드에 연결된 노드 리스트가 저장된다
-        private ArrayList<LinkedList<Node>> list;
-
-        Graph(int kindOfNode) {
-            list = new ArrayList<LinkedList<Node>>(kindOfNode + 1);
-
-            for (int i = 0; i < kindOfNode + 1; i++) {
-                list.add(new LinkedList<Node>());
-            }
-        }
-
-        public void add(int nodeNum, int targetNode, int distance) {
-            list.get(nodeNum).add(new Node(targetNode, distance));
-        }
-
-        public ArrayList<LinkedList<Node>> getList() {
-            return list;
-        }
     }
 
     static class Node {
@@ -63,6 +38,30 @@ public class PriorityQueueDijkstra {
         public Node(int targetNode, int cost) {
             this.targetNode = targetNode;
             this.cost = cost;
+        }
+    }
+
+    static class Graph {
+
+        //바깥의 ArrayList의 크기는 노드의 개수 + 1 이다
+        //예를들면 노드가 1번~6번까지 있으면 ArrayList 크기는 7이 된다
+        //안쪽의 LinkedList 에는 해당 노드에 연결된 노드 리스트가 저장된다
+        private ArrayList<LinkedList<Node>> list;
+
+        Graph(int numNode) {
+            list = new ArrayList<LinkedList<Node>>(numNode + 1);
+
+            for (int i = 0; i < numNode + 1; i++) {
+                list.add(new LinkedList<Node>());
+            }
+        }
+
+        public void add(int nodeNum, int targetNode, int cost) {
+            list.get(nodeNum).add(new Node(targetNode, cost));
+        }
+
+        public ArrayList<LinkedList<Node>> getList() {
+            return list;
         }
     }
 
@@ -110,16 +109,22 @@ public class PriorityQueueDijkstra {
                 }
             }
 
+
+
+
         }
+
+        int cnt = 0;
+        int max = 0;
 
         for (int i = 1; i < dp.length; i++) {
-            if (dp[i] == INF) {
-                System.out.println("infinity");
-            } else{
-                System.out.println(dp[i]);
+            if (dp[i] != INF) {
+                cnt++;
+                max = Math.max(dp[i],max);
             }
-
         }
+        System.out.print((cnt-1) + " " + max);
+
 
 
     }

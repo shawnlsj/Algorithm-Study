@@ -39,10 +39,10 @@ public class SimpleDijkstra {
     static class Node{
 
         private int targetNode; // 목표 노드의 번호
-        private int distance; // 목표 노드까지의 거리
+        private int cost; // 목표 노드까지의 거리
 
-        Node(int targetNode, int distance) {
-            this.distance = distance;
+        Node(int targetNode, int cost) {
+            this.cost = cost;
             this.targetNode = targetNode;
         }
 
@@ -50,8 +50,8 @@ public class SimpleDijkstra {
             return targetNode;
         }
 
-        public int getDistance() {
-            return distance;
+        public int getCost() {
+            return cost;
         }
     }
     static class Graph{
@@ -118,7 +118,7 @@ public class SimpleDijkstra {
 
                 //dp테이블에는 기존 값 vs 자기 자신을 경유한 값을 비교하여 작은 값을 저장한다
                 dp[node.getTargetNode()] =
-                        Math.min(dp[node.getTargetNode()], dp[minIndex] + node.getDistance());
+                        Math.min(dp[node.getTargetNode()], dp[minIndex] + node.getCost());
             }
         }
 
