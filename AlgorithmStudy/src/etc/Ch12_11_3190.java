@@ -1,10 +1,12 @@
+package etc;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-public class Ch12_3190 {
+public class Ch12_11_3190 {
     static int n;
 
     static int headX = 1;

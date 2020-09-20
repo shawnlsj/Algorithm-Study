@@ -1,4 +1,4 @@
-package prime_number;
+package etc.prime_number;
 
 import java.io.BufferedReader;
 import java.io.IOException;

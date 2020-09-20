@@ -1,4 +1,4 @@
-package greedy_study;
+package greedy;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -1,4 +1,4 @@
-package prime_number;
+package etc.prime_number;
 
 public class PrimeEx1 {
 	public static void main(String[] args) {

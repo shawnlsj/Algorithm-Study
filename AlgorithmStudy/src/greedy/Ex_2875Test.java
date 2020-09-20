@@ -1,32 +1,50 @@
-package greedy_study;
+package greedy;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+public class Ex_2875Test {
+	public static void main(String[] args) {
+		while (true) {
+			int a = (int) (Math.random() * 5);
+			int b = (int) (Math.random() * 5);
+			int c = (int) (Math.random() * (a + b + 1));
+			if (answer(a, b, c) != correctAnswer(a, b, c)) {
+				System.out.println("a : " + a);
+				System.out.println("b : " + b);
+				System.out.println("c : " + c);
+				System.out.println("no");
+				break;
+			}
+		}
+	}
 
-public class Ex_2875 {
+	static int correctAnswer(int n, int m, int k) {
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int max = n / 2 < m ? n / 2 : m;
 
-		StringTokenizer stn = new StringTokenizer(br.readLine(), " ");
+		k -= n + m - max * 3;
+
+		while (k > 0) {
+			k -= 3;
+			max--;
+		}
+		System.out.println("correct : " + max);
+		return max;
+	}
+
+	static int answer(int n, int m, int k) {
 		int female = 0;
 		int male = 0;
 		int intern = 0;
 		int team = 0;
 
-		female = Integer.parseInt(stn.nextToken());
-		male = Integer.parseInt(stn.nextToken());
-		intern = Integer.parseInt(stn.nextToken());
-		System.out.println("female:" + female);
-		System.out.println("male:" + male);
-		System.out.println("intern:" + intern);
-		// 여자가 남자와 같거나 더 많을 경우 남자 기준으로 팀을 작성
+		female = n;
+		male = m;
+		intern = k;
+
 		while (true) {
 			if (female >= male * 2) {
 				team = male;
-				System.out.println("team:" + team);
+				// if (intern > 0 && female > 0 && male > 0 && team > 0) {
+				// 여자를 먼저 뺀 뒤에, 팀이 유지되는지 확인
 				if (intern > 0) {
 					female--;
 					intern--;
@@ -36,18 +54,19 @@ public class Ex_2875 {
 					break;
 				}
 				boolean isRemain = (team == getTeam(female, male)) ? true : false;
-				// 팀이 유지 되었다면, 여자를 또 빼고
 				if (isRemain) {
-					if(intern<=0) break;
+					if (intern <= 0)
+						break;
 					female--;
 					intern--;
 					if (team != getTeam(female, male)) {
 						female++;
 						male--;
+
 						if (team != getTeam(female, male)) {
 							team--;
 						}
-					}
+					} // }
 				} else { // 팀이 깨졌다면, 남자를 뺀다
 					team--;
 					male--;
@@ -56,14 +75,16 @@ public class Ex_2875 {
 
 			} else { // 팀을짜면 남자가 남는 경우로 남자를 뺀다
 				team = female / 2;
-				if(intern>0) {
-				male--;
-				intern--;
+				// if (intern > 0 && female > 0 && male > 0 && team > 0) {
+				if (intern > 0) {
+					male--;
+					intern--;
 				}
 				boolean isRemain = (team == getTeam(female, male)) ? true : false;
 
 				if (isRemain) {
-					if(intern<=0) break;
+					if (intern <= 0)
+						break;
 					male--;
 					intern--;
 					if (team != getTeam(female, male)) {
@@ -84,10 +105,12 @@ public class Ex_2875 {
 					break;
 				}
 
-			} 
-		} 
-
+				// } // while
+			} // else
+		}
 		System.out.print(team);
+		System.out.println("ans :" + team);
+		return team;
 	}// main
 
 	public static int getTeam(int female, int male) {
@@ -97,4 +120,4 @@ public class Ex_2875 {
 			return female / 2;
 		}
 	}
-}// class
+}

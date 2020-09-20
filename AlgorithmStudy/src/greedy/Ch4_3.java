@@ -1,8 +1,7 @@
-package greedy_study;
+package greedy;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 
 public class Ch4_3 {
 	public static void main(String[] args) throws Exception{
@@ -27,7 +26,7 @@ public class Ch4_3 {
 		
 		System.out.println(answer);
 		
-		// ¸» ÁÂÇ¥ ±¸ÇÏ±â
+		// ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½Ï±ï¿½
 		
 		
 		

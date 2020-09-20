@@ -1,4 +1,4 @@
-package hanoi_tower;
+package etc.hanoi_tower;
 
 import java.io.BufferedReader;
 import java.io.IOException;

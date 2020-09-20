@@ -1,4 +1,4 @@
-package greedy_study;
+package greedy;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,12 +41,12 @@ public class Ch4_4 {
 			System.out.println("y : " + y);
 			System.out.println("dir : " + dir);
 			dir = turnLeft(dir);
-				//°¡º» °÷ÀÎÁö Ã¼Å©
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
 			if (isWent(board, visitBoard, x, y, dir, xArr, yArr)) {
 				continue;
 
 			} else {
-				// ¹Ù´Ù°¡ ¾Æ´Ï¸é ¹Ù¶óº¸´Â ¹æÇâÀ¸·Î 1Ä­ ÀüÁø
+				// ï¿½Ù´Ù°ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½Ù¶óº¸´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1Ä­ ï¿½ï¿½ï¿½ï¿½
 				if (!isOcean(board, x, y, dir, xArr, yArr)) {
 					visitBoard[x + xArr[dir]][y + yArr[dir]] = 1;
 					x = x + xArr[dir];
@@ -56,8 +56,8 @@ public class Ch4_4 {
 			}
 
 			if (isBlocked(board, visitBoard, x, y, dir, xArr, yArr)) {
-				// 4¹æÇâ ¸ðµÎ °¢°¢ ¹Ù´Ù or °¡º» °÷ÀÌ¸é 
-				// ¹æÇâÀ» À¯ÁöÇÏ¸ç 1Ä­ µÚ·Î°¨
+				// 4ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù´ï¿½ or ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ 
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ 1Ä­ ï¿½Ú·Î°ï¿½
 				int reverseDir = turnLeft(turnLeft(dir));
 				x = x + xArr[reverseDir];
 				y = y + yArr[reverseDir];
@@ -80,18 +80,18 @@ public class Ch4_4 {
 
 		if (board[afterX][afterY] == 1) {
 
-//¹Ù´Ù¸é °¡º»°÷ÀÌ ¾Æ´Ï´Ù
+//ï¿½Ù´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï´ï¿½
 			return false;
 		} else {
 
-//¹Ù´Ù°¡ ¾Æ´Ï¶ó¸é À°ÁöÀÌ´Ï, À°ÁöÀÌ¸é °¡º» °÷ÀÎÁö Ã¼Å©
+//ï¿½Ù´Ù°ï¿½ ï¿½Æ´Ï¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
 			if (visitBoard[afterX][afterY] == 0) {
-				// °¡º»°÷ÀÌ ¾Æ´Ï´Ù
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï´ï¿½
 				
 				return false;
 			}
 		}
-//°¡º» °÷ÀÌ´Ù
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½
 		return true;
 	}
 

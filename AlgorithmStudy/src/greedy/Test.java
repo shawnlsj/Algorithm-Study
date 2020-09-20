@@ -1,4 +1,4 @@
-package greedy_study;
+package greedy;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
