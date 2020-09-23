@@ -9,14 +9,12 @@ public class MyPriorityQueue {
 
     void offer(int value) {
         binaryTree.add(value);
-        binaryTree.clearVisitedStatus();
         heapSort(binaryTree);
     }
     int poll() {
 
         // 현재 루트 노드의 value 값을 리턴 값으로 잡는다
         int returnVal = binaryTree.rootNode.value;
-        binaryTree.clearVisitedStatus(); // 방문 여부가 오염되어있을 수 있으니 초기화 한다
 
         // 제일 끝에 있는 노드를 찾고, 루트노드와 끝 노드를 바꾸어 준다
         CompleteBinaryTree.Node finalNode = searchFinalNode(binaryTree);
@@ -146,14 +144,20 @@ public class MyPriorityQueue {
         CompleteBinaryTree.Node finalNode;
         do {
             // 1. 최대 힙 구조를 만든다
-            // 2. 방문한 적이 없는 final 노드를 찾는다
-            // 3. root 노드와 final 노드를 바꾼다
-            // 4. final 노드가 있던 위치에 방문 처리를 한다
-            // 위의 과정을 root 노드와 final 노드가 같아질 때 까지반복 한다
             buildMaxHeap(binaryTree);
+
+            // 2. 방문한 적이 없는 final 노드를 찾는다
             finalNode = searchFinalNode(binaryTree);
+
+            // 3. root 노드와 final 노드를 바꾼다
             swapNode(binaryTree.rootNode, finalNode);
+
+            // 4. final 노드가 있던 위치에 방문 처리를 한다
+            finalNode.visited = true;
+
+            // 위의 과정을 root 노드와 final 노드가 같아질 때 까지반복 한다
         } while (binaryTree.rootNode != finalNode);
+        binaryTree.clearVisitedStatus();
     }
 
 
@@ -172,7 +176,6 @@ public class MyPriorityQueue {
                 q.offer(node.rightChild);
             }
         }
-        finalNode.visited = true;
         return finalNode;
     }
 
