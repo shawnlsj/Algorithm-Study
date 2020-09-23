@@ -15,17 +15,17 @@ public class MergeSort {
 	public static void main(String[] args) {
 		
 		int[] arr = makingIntArr();
-		System.out.println("Á¤·Ä Àü" + Arrays.toString(arr));
+		System.out.println("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½" + Arrays.toString(arr));
 
 		mergeSort(arr, 0, arr.length - 1);
-		System.out.println("Á¤·Ä ÈÄ " + Arrays.toString(arr));
+		System.out.println("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ " + Arrays.toString(arr));
 		
 		
 	}
 
 	public static void mergeSort(int[] arr, int start, int end) {
 
-		if ((end - start + 1) == 1) //¹è¿­ÀÇ Å©±â°¡ 1ÀÌ¸é return 
+		if ((end - start + 1) == 1)
 			return;
 		int middle = start + ((end - start) / 2);
 
