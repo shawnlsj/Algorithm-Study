@@ -7,16 +7,18 @@ public class HeapSort {
     public static void main(String[] args) {
         CompleteBinaryTree binaryTree = new CompleteBinaryTree();
 
-        for (int i = 0; i < 6; i++) {
-            int x = (int) (Math.random() * 15);
-            System.out.println("add : " + x);
-            binaryTree.add(x);
-        }
-        System.out.println("====현재 트리 상태======");
-        binaryTree.print();
+        binaryTree.add(15);
+        binaryTree.add(3);
+        binaryTree.add(12);
+        binaryTree.add(33);
+        binaryTree.add(7);
+//        for (int i = 0; i < 6; i++) {
+//            int x = (int) (Math.random() * 15);
+//            System.out.println("add : " + x);
+//            binaryTree.add(x);
+//        }
 
-        System.out.println("===최대 힙 수행 후===");
-        buildMaxHeap(binaryTree); // 완전 이진트리를 최대 힙 구조로 만든다
+        System.out.println("====현재 트리 상태======");
         binaryTree.print();
 
         System.out.println("===오름차순 힙 정렬 후===");
@@ -31,16 +33,15 @@ public class HeapSort {
         // 모든 노드에 대하여 heapify 를 수행
         while (!q.isEmpty()) {
             CompleteBinaryTree.Node node = q.poll();
+            if (node.visited) continue;
             maxHeapify(node);
-            if (node.leftChild != null) {
+            if (node.leftChild != null && (node.visited == false)) {
                 q.add(node.leftChild);
             }
-            if (node.rightChild != null) {
+            if (node.rightChild != null && (node.visited == false)) {
                 q.add(node.rightChild);
             }
         }
-
-
     }
 
 
@@ -67,11 +68,11 @@ public class HeapSort {
         while (!q.isEmpty()) {
             CompleteBinaryTree.Node node = q.poll();
             finalNode = node;
-            if ((node.leftChild != null) && (node.leftChild.visited && false)) {
-                q.add(node.leftChild);
+            if ((node.leftChild != null) && (node.leftChild.visited == false)) {
+                q.offer(node.leftChild);
             }
-            if ((node.rightChild != null) && (node.rightChild.visited && false)) {
-                q.add(node.rightChild);
+            if ((node.rightChild != null) && (node.rightChild.visited == false)) {
+                q.offer(node.rightChild);
             }
         }
         finalNode.visited = true;
@@ -80,10 +81,10 @@ public class HeapSort {
 
     private static void maxHeapify(CompleteBinaryTree.Node node) {
         // 왼쪽 자식과 먼저 비교하고 오른쪽 자식과도 비교한다
-        if ((node.leftChild != null) && (node.value < node.leftChild.value)) {
+        if ((node.leftChild != null) && (node.value < node.leftChild.value) && (node.leftChild.visited == false)) {
             swapNode(node, node.leftChild);
         }
-        if ((node.rightChild != null) && (node.value < node.rightChild.value)) {
+        if ((node.rightChild != null) && (node.value < node.rightChild.value) && (node.rightChild.visited == false)) {
             swapNode(node, node.rightChild);
         }
 
@@ -171,10 +172,5 @@ public class HeapSort {
                 }
             }
         }
-
     }
-
-
-
-
 }

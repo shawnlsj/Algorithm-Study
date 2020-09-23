@@ -3,6 +3,7 @@ package util;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+// 소스 출처 https://limkydev.tistory.com/178
 public class CaseOfNumber {
 
     public static void main(String[] args) {

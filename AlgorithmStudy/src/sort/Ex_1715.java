@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 
+// 표준 라이브러리 우선순위 큐 버전
 public class Ex_1715 {
     static int n;
     static int answer;
