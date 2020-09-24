@@ -2,9 +2,9 @@ package sort;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 // 직접 구현한 우선순위 큐 버전
 public class Ex_1715_v2 {
@@ -12,221 +12,195 @@ public class Ex_1715_v2 {
     static int answer;
 
     public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine()); // 카드 뭉치 수
 
-        PriorityQueue<Integer> q = new PriorityQueue<>();
+        int[] arr = new int[99999];
+        int[] arr2;
 
-        for (int i = 0; i < n; i++) {
-            int x = Integer.parseInt(br.readLine());
-            q.add(x);
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = (int) (Math.random() * 123456);
         }
+        arr2 = Arrays.copyOf(arr, arr.length);
 
-        for (int i = 0; i < n - 1; i++) {
-            int merge = 0;
-            merge += q.poll();
-            merge += q.poll();
-            q.add(merge);
-            answer += merge;
+        MyPriorityQueue2 q = new MyPriorityQueue2();
+        q.arr = arr;
+        q.size = arr.length;
+        q.cursor = arr.length - 1;
+
+        double start = System.currentTimeMillis();
+        q.heapSort();
+        System.out.println(System.currentTimeMillis() - start);
+
+        MyPriorityQueue3 q3 = new MyPriorityQueue3();
+        q3.arr = arr2;
+        q3.size = arr2.length;
+        q3.cursor = arr2.length;
+
+        start = System.currentTimeMillis();
+        q3.heapSort();
+        System.out.println(System.currentTimeMillis() - start);
+
+        for (int i = 0; i < q.arr.length; i++) {
+            if (q.arr[i] != q3.arr[i]) {
+                System.out.println("실패");
+            }
         }
-        System.out.println(answer);
+        System.out.println("종료");
     }
 }
 
-class MyPriorityQueue {
+class MyPriorityQueue2 {
+    int[] arr = {4, 7, 15, 0, 5, 8, 1, 12, 2, 3};
+    int size = 10;
+    int cursor = 9;
+    private int finalNodeIndex = -1;
 
-    CompleteBinaryTree binaryTree = new CompleteBinaryTree();
+    int size() {
+        return size;
+    }
 
-    void offer(int value) {
-        binaryTree.add(value);
-        heapSort(binaryTree);
+    void offer(int i) {
+        size++;
+        cursor++;
+        if (arr.length < size) {
+            arr = sizeUp();
+        }
+        arr[cursor] = i;
+        heapSort();
+    }
+
+    int[] sizeUp() {
+        int[] newArr = new int[arr.length + 50];
+        for (int i = 0; i < arr.length; i++) {
+            newArr[i] = arr[i];
+        }
+        return newArr;
     }
 
     int poll() {
-        int returnVal = binaryTree.rootNode.value;
-        CompleteBinaryTree.Node finalNode = searchFinalNode(binaryTree);
-        swapNode(binaryTree.rootNode, finalNode);
+        int result = arr[0];
+        arr[0] = arr[cursor];
+        arr[cursor] = 0;
 
-        //부모 노드가 있다면, 현재 노드가 왼쪽 자식인지 오른쪽 자식인지 판별 후 null 대입
-        if (finalNode.parent != null) {
-            if (finalNode.parent.leftChild == finalNode) {
-                finalNode.parent.leftChild = null;
-            } else {
-                finalNode.parent.rightChild = null;
-            }
-            heapSort(binaryTree);
-        } else {
-            finalNode = null;  //부모 노드가 없다면 자기 자신을 null로 초기화
-        }
-        return returnVal;
+        size--;
+        cursor--;
+        heapSort();
+        return result;
     }
 
-
-    static class CompleteBinaryTree {
-        CompleteBinaryTree.Node rootNode;
-
-        void clearVisitedStatus() {
-            Queue<CompleteBinaryTree.Node> q = new LinkedList<>();
-            q.offer(this.rootNode);
-            while (!q.isEmpty()) {
-                CompleteBinaryTree.Node node = q.poll();
-                node.visited = false;
-                if (node.leftChild != null) {
-                    q.offer(node.leftChild);
-                }
-                if (node.rightChild != null) {
-                    q.offer(node.rightChild);
-                }
-            }
-        }
-
-        static class Node {
-            int value;
-            CompleteBinaryTree.Node leftChild;
-            CompleteBinaryTree.Node rightChild;
-            CompleteBinaryTree.Node parent;
-            boolean visited = false;
-
-            Node(int value, CompleteBinaryTree.Node parent) {
-                this.value = value;
-                this.parent = parent;
-            }
-        }
-
-        void print() {
-            java.util.Queue<CompleteBinaryTree.Node> q = new LinkedList<>();
-            q.offer(rootNode);
-            while (!q.isEmpty()) {
-                CompleteBinaryTree.Node node = q.poll();
-                System.out.print("node = " + node.value);
-                if (node.leftChild != null) {
-                    System.out.print(" left child = " + node.leftChild.value);
-                    q.offer(node.leftChild);
-                }
-                if (node.rightChild != null) {
-                    System.out.print(" right child= " + node.rightChild.value);
-                    q.offer(node.rightChild);
-                }
-                if ((node.leftChild == null) && (node.rightChild == null)) {
-                    System.out.print(" <leaf node> ");
-                }
-                System.out.println();
-            }
-
-        }
-
-        void add(int value) {
-            if (rootNode == null) {
-                rootNode = new CompleteBinaryTree.Node(value, null);
-            } else {
-                bfs(rootNode, value);
-            }
-        }
-
-        private void bfs(CompleteBinaryTree.Node rootNode, int value) {
-            Queue<CompleteBinaryTree.Node> q = new LinkedList<>();
-            q.offer(rootNode);
-            while (true) {
-                CompleteBinaryTree.Node node = q.poll();
-                if (node.leftChild == null) {
-                    node.leftChild = new CompleteBinaryTree.Node(value, node);
-                    return;
-                } else if (node.rightChild == null) {
-                    node.rightChild = new CompleteBinaryTree.Node(value, node);
-                    return;
-                } else {
-                    q.offer(node.leftChild);
-                    q.offer(node.rightChild);
-                }
-            }
+    void heapSort() {
+        finalNodeIndex = cursor;
+        while (finalNodeIndex > 0) {
+            buildMaxHeap();
+            //    System.out.println("--- 힙 구조 완성 ---");
+            //     System.out.println(Arrays.toString(arr));
+            swap(0, finalNodeIndex);
+            //   System.out.println("인덱스 0과" + finalNodeIndex+"를 바꿔준다");
+            finalNodeIndex--;
         }
     }
 
-    static void buildMaxHeap(CompleteBinaryTree binaryTree) {
-        java.util.Queue<CompleteBinaryTree.Node> q = new LinkedList<>();
-        q.offer(binaryTree.rootNode);
+    void swap(int indexA, int indexB) {
+        int tmp = 0;
+        tmp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = tmp;
+    }
 
-        // 모든 노드에 대하여 heapify 를 수행
-        while (!q.isEmpty()) {
-            CompleteBinaryTree.Node node = q.poll();
-            if (node.visited) continue;
-            maxHeapify(node);
-            if (node.leftChild != null && (node.visited == false)) {
-                q.offer(node.leftChild);
-            }
-            if (node.rightChild != null && (node.visited == false)) {
-                q.offer(node.rightChild);
-            }
+    void buildMaxHeap() {
+        //   System.out.println("finalNodeIndex/2 = " + finalNodeIndex/ 2);
+        for (int i = finalNodeIndex / 2; i >= 0; i--) {
+            maxHeapify(i); //마지막 노드의 부모노드부터 heapify 진행
         }
     }
 
+    void maxHeapify(int index) {
+        int max = arr[index];
+        int maxIndex = 0;
 
-    static void heapSort(CompleteBinaryTree binaryTree) {
-        CompleteBinaryTree.Node finalNode;
-        do {
-            // 1. 최대 힙 구조를 만든다
-            buildMaxHeap(binaryTree);
+        //   System.out.println("------");
+        //   System.out.println(Arrays.toString(arr));
+        //   System.out.println("heapyfy 진행할 index = " + index);
 
-            // 2. 방문한 적이 없는 final 노드를 찾는다
-            finalNode = searchFinalNode(binaryTree);
+        //   System.out.println("finalNodeIndex = " + finalNodeIndex);
 
-            // 3. root 노드와 final 노드를 바꾼다
-            swapNode(binaryTree.rootNode, finalNode);
-
-            // 4. final 노드가 있던 위치에 방문 처리를 한다
-            finalNode.visited = true;
-
-            // 위의 과정을 root 노드와 final 노드가 같아질 때 까지반복 한다
-        } while (binaryTree.rootNode != finalNode);
-        binaryTree.clearVisitedStatus();
+        if (index * 2 <= finalNodeIndex && arr[index * 2] > max) {
+            //     System.out.println(" 왼쪽이 자식이 더 큼 index * 2  > max");
+            maxIndex = index * 2;
+            max = arr[index * 2];
+        }
+        if (index * 2 + 1 <= finalNodeIndex && arr[index * 2 + 1] > max) {
+            //     System.out.println(" 오른쪽 자식이 더 큼 index * 2 + 1  > max");
+            maxIndex = index * 2 + 1;
+        }
+        // System.out.println("maxIndex = " + maxIndex);
+        //  System.out.println("인덱스"+ index + " 와 " + maxIndex + "를 스왑한다");
+        swap(index, maxIndex);
     }
+}
 
+class MyPriorityQueue3 {
+    int[] arr = {4, 7, 15, 0, 5, 8, 1, 12, 2, 3};
+    int size = 10;
+    int cursor = 10;
+    int rootIndex = 1;
+    private int finalNodeIndex = -1;
 
-    static CompleteBinaryTree.Node searchFinalNode(CompleteBinaryTree binaryTree) {
-        java.util.Queue<CompleteBinaryTree.Node> q = new LinkedList<>();
-        q.offer(binaryTree.rootNode);
-        CompleteBinaryTree.Node finalNode = null;
-
-        while (!q.isEmpty()) {
-            CompleteBinaryTree.Node node = q.poll();
-            finalNode = node;
-            if ((node.leftChild != null) && (node.leftChild.visited == false)) {
-                q.offer(node.leftChild);
-            }
-            if ((node.rightChild != null) && (node.rightChild.visited == false)) {
-                q.offer(node.rightChild);
-            }
-        }
-        return finalNode;
-    }
-
-    private static void maxHeapify(CompleteBinaryTree.Node node) {
-        // 왼쪽 자식과 먼저 비교하고 오른쪽 자식과도 비교한다
-        if ((node.leftChild != null) && (node.value < node.leftChild.value) && (node.leftChild.visited == false)) {
-            swapNode(node, node.leftChild);
-        }
-        if ((node.rightChild != null) && (node.value < node.rightChild.value) && (node.rightChild.visited == false)) {
-            swapNode(node, node.rightChild);
-        }
-
-        // 부모 노드와 비교하여 자리바꿈이 이동하면
-        // 또, 그의 부모와 비교한다
-        if (node.parent != null) {
-            CompleteBinaryTree.Node parent = node.parent;
-            do {
-                if (node.value > parent.value) {
-                    swapNode(node, parent);
-                } else {
-                    return; // 부모와 자리바꿈이 일어나지 않았다면 해당 노드에 대한 heapfy 를 종료한다
-                }
-                parent = parent.parent;
-            } while (parent != null); // 자리 바꿈이 일어났고, 부모 노드가 존재한다면 반복문을 이어서 수행한다
+    void heapSort() {
+        finalNodeIndex = cursor;
+        while (finalNodeIndex > 1) {
+            buildMaxHeap();
+      //      System.out.println("--- 힙 구조 완성 ---");
+      //      System.out.println(Arrays.toString(arr));
+            swap(rootIndex, finalNodeIndex);
+      //      System.out.println("루트와" + finalNodeIndex + "를 바꿔준다");
+            finalNodeIndex--;
         }
     }
 
-    static void swapNode(CompleteBinaryTree.Node node1, CompleteBinaryTree.Node node2) {
-        int tmp = node1.value;
-        node1.value = node2.value;
-        node2.value = tmp;
+    void swap(int indexA, int indexB) {
+        int tmp = 0;
+        indexA -= 1;
+        indexB -= 1;
+        tmp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = tmp;
+    }
+
+    void buildMaxHeap() {
+        //   System.out.println("finalNodeIndex/2 = " + finalNodeIndex/ 2);
+        for (int i = finalNodeIndex / 2; i >= 1; i--) {
+            maxHeapify(i); //마지막 노드의 부모노드부터 heapify 진행
+        }
+    }
+
+    void maxHeapify(int index) {
+
+        int max = arr[index - 1];
+        int maxIndex = -1;
+
+//        System.out.println("------");
+//        System.out.println(Arrays.toString(arr));
+//        System.out.println("heapyfy 진행할 index = " + index);
+//
+//        System.out.println("finalNodeIndex = " + finalNodeIndex);
+
+        if (index * 2 <= finalNodeIndex && arr[(index * 2) - 1] > max) {
+    //        System.out.println(" 왼쪽이 자식이 더 큼 index * 2  > max");
+            maxIndex = index * 2;
+            max = arr[index * 2 - 1];
+        }
+        if (index * 2 + 1 <= finalNodeIndex && arr[(index * 2 + 1) - 1] > max) {
+     //       System.out.println(" 오른쪽 자식이 더 큼 index * 2 + 1  > max");
+            maxIndex = index * 2 + 1;
+        }
+     //   System.out.println("maxIndex = " + maxIndex);
+        if (maxIndex == -1) {
+     //       System.out.println("패스");
+            return;
+        }
+
+      //  System.out.println("인덱스" + index + " 와 " + maxIndex + "를 스왑한다");
+        swap(index, maxIndex);
+        maxHeapify(maxIndex);
     }
 }

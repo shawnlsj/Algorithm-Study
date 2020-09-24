@@ -36,7 +36,21 @@ public class MyPriorityQueue {
 
 
     static class CompleteBinaryTree {
+
         CompleteBinaryTree.Node rootNode;
+
+        static class Node {
+            int value;
+            CompleteBinaryTree.Node leftChild;
+            CompleteBinaryTree.Node rightChild;
+            CompleteBinaryTree.Node parent;
+            boolean visited = false;
+
+            Node(int value, CompleteBinaryTree.Node parent) {
+                this.value = value;
+                this.parent = parent;
+            }
+        }
 
         void clearVisitedStatus() {
             //bfs 로 모든 노드를 방문하여 방문 여부를 false로 초기화한다
@@ -51,19 +65,6 @@ public class MyPriorityQueue {
                 if (node.rightChild != null) {
                     q.offer(node.rightChild);
                 }
-            }
-        }
-
-        static class Node {
-            int value;
-            CompleteBinaryTree.Node leftChild;
-            CompleteBinaryTree.Node rightChild;
-            CompleteBinaryTree.Node parent;
-            boolean visited = false;
-
-            Node(int value, CompleteBinaryTree.Node parent) {
-                this.value = value;
-                this.parent = parent;
             }
         }
 
