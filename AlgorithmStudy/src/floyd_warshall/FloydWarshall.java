@@ -92,12 +92,13 @@ public class FloydWarshall {
                 dp[i][linkedList.get(j).targetNode] = linkedList.get(j).distance;
             }
         }
-        //i번 노드를 거쳐가는 경우에 대하여
-        //j번에서 k번으로 바로 가는 거보다, i번 노드를 거치는 경우가 짧은지 비교한다
+        //k번 노드를 거쳐가는 경우에 대하여
+        //i번에서 j번으로 바로 가는 거보다, k번 노드를 거치는 경우가 짧은지 비교한다
         for (int i = 1; i < list.size(); i++) {
             for (int j = 1; j < list.size(); j++) {
                 for (int k = 1; k < list.size(); k++) {
-                    dp[j][k] = Math.min(dp[j][k], dp[j][i] + dp[i][k]);
+                    if(i==j || j==k) continue;
+                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k][j]);
                 }
             }
         }
@@ -106,7 +107,7 @@ public class FloydWarshall {
         for (int i = 1; i < list.size(); i++) {
             for (int j = 1; j < list.size(); j++) {
                 if (dp[i][j] == INF) {
-                    System.out.println("INF");
+                    System.out.println("0");
                 } else
                     System.out.print(dp[i][j]+" ");
             }
