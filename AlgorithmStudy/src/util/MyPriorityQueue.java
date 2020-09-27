@@ -1,10 +1,25 @@
 package util;
 
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class MyPriorityQueue {
 
+    public static void main(String[] args) {
+        MyPriorityQueue q = new MyPriorityQueue();
+
+        for (int i = 0; i < 500; i++) {
+            int x = (int)(Math.random()*350);
+            q.offer(x);
+        }
+
+        for (int i = 0; i < 30; i++) {
+            System.out.println(q.poll());
+        }
+
+    }
     CompleteBinaryTree binaryTree = new CompleteBinaryTree();
 
     void offer(int value) {

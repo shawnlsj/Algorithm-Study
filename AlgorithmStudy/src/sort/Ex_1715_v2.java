@@ -15,18 +15,18 @@ public class Ex_1715_v2 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine()); // 카드 뭉치 수
 
-        PriorityQueue<Integer> q = new PriorityQueue<>();
+        MyPriorityQueue q = new MyPriorityQueue();
 
         for (int i = 0; i < n; i++) {
             int x = Integer.parseInt(br.readLine());
-            q.add(x);
+            q.offer(x);
         }
 
         for (int i = 0; i < n - 1; i++) {
             int merge = 0;
             merge += q.poll();
             merge += q.poll();
-            q.add(merge);
+            q.offer(merge);
             answer += merge;
         }
         System.out.println(answer);
