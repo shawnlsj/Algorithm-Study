@@ -1,6 +1,7 @@
 package util;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class MyPriorityQueue2 {
     private int[] arr = new int[50];
@@ -19,22 +20,26 @@ public class MyPriorityQueue2 {
     }
 
     public static void main(String[] args) {
-        MyPriorityQueue2 q = new MyPriorityQueue2();
-        q.offer(4);
-        q.offer(7);
-        q.offer(1);
-        q.offer(5);
-        q.offer(2);
+        MyPriorityQueue2 myQueue = new MyPriorityQueue2();
+        PriorityQueue queue = new PriorityQueue();
 
+        double start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            queue.offer(i);
+        }
+        for (int i = 0; i < 1000000; i++) {
+            queue.poll();
+        }
+        System.out.println(System.currentTimeMillis() - start);
 
-        q.print();
-        System.out.println(q.poll());
-        System.out.println(q.poll());
-        System.out.println(q.poll());
-        System.out.println(q.poll());
-        System.out.println(q.poll());
-        q.print();
-
+        start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            myQueue.offer(i);
+        }
+        for (int i = 0; i < 1000000; i++) {
+            myQueue.poll();
+        }
+        System.out.println(System.currentTimeMillis() - start);
 
     }
 

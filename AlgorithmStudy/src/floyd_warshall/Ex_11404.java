@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Ex_11404 {
-    static final int INF = 100_001; // 비용의 범위가 10만 이하의 자연수이므로
+    static final int INF = (int)1e9;
     static int[][] graph;
     static int n;
     static int m;
