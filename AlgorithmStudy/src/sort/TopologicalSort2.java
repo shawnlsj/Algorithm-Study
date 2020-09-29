@@ -63,7 +63,7 @@ public class TopologicalSort2 {
         }
 
         while (true) {
-            if (q.isEmpty() && cnt < nodeArr.length-1) {
+            if (q.isEmpty() && cnt < nodeArr.length - 1) {
                 System.out.println("정렬 수행 불가");
                 return;
             }
