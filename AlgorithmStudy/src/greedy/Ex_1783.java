@@ -38,7 +38,6 @@ public class Ex_1783 {
                 return m - 7 + 5;
             }
         }
-
         return 0;
     }
 }

@@ -49,7 +49,6 @@ public class Ex_18428 {
         Combination.r = 3;
         Combination.combination();
 
-
         while (!combinations.isEmpty()) {
             isSearched = false;
             for (int i = 0; i < 3; i++) {

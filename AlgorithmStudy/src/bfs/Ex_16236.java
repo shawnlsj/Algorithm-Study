@@ -1,5 +1,8 @@
+package bfs;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -9,16 +12,20 @@ public class Ex_16236 {
     static int[] colDir = {1, 0, -1, 0};
     static int[][] dirBoard;
     static int sharkDir;
+    static int[] fishCntArr = new int[6 + 1];
 
     static int n;
     static int[][] board;
     static boolean[][] visited;
 
-    static int time;
-    static int exp;
-    static int row;
-    static int col;
-    static int distance;
+    static final int INF = (int) 1e9;
+    static int time; // 현재까지 흐른 시간
+    static int exp; // 아기상어의 경험치
+    static int row; // 현재 세로 위치
+    static int col; // 현재 가로 위치
+    static int min;
+    static int numFish; // 물고기의 수
+    static int distance; // 물고기까지의 거리
     static int sharkSize = 2;
     static ArrayList<Fish> fishes;
 
@@ -31,9 +38,6 @@ public class Ex_16236 {
         exp = 0;
         distance = 0;
 
-        for (int[] arr : dirBoard) {
-            Arrays.fill(arr, -1);
-        }
 
         for (int i = 1; i <= n; i++) {
             StringTokenizer stk = new StringTokenizer(br.readLine(), " ");
@@ -44,29 +48,23 @@ public class Ex_16236 {
                 if (x == 9) {
                     row = i;
                     col = j;
+                } else if (x > 0) {
+                    numFish++;
+                    fishCntArr[x]++;
                 }
             }
         }
-        while (true) {
+
+        double start = System.currentTimeMillis();
+        while (numFish > 0) {
+
+            min = INF;
             fishes = new ArrayList<>();
             dirBoard[row][col] = -1;
             dfs();
-            if (fishes.size() == 0){
-                System.out.println(" 보드 상태 ");
-                System.out.println("sharkSize = " + sharkSize);
-                for (int[] arr : board) {
-                    System.out.println(Arrays.toString(arr));
-                }
-                System.out.println("방향 상태");
-                for (int[] arr : dirBoard) {
-                    System.out.println(Arrays.toString(arr));
-                }
-                System.out.println("방문 상태");
-                for (boolean[] arr : visited) {
-                    System.out.println(Arrays.toString(arr));
-                }
-                System.out.println("---");
-                break;}
+            if (fishes.size() == 0) {
+                break;
+            }
 
             fishes.sort((o1, o2) -> {
                 if (o1.distance != o2.distance) {
@@ -80,7 +78,8 @@ public class Ex_16236 {
 
             //물고기 위치로 이동해 물고기를 먹는다
             Fish fish = fishes.get(0);
-            System.out.println("fish.distance = " + fish.distance);
+            fishCntArr[fish.size]--;
+            numFish--;
             time += fish.distance;
             exp++;
             if (sharkSize == exp) {
@@ -91,48 +90,42 @@ public class Ex_16236 {
             row = fish.row;
             col = fish.col;
             board[row][col] = 9;
-
         }
+        System.out.println(System.currentTimeMillis() - start);
         System.out.println(time);
-
-
-
-
     }//main
 
+    static boolean checkFishes() {
+        for (int i = 1; i <= 6; i++) {
+            if (i < sharkSize && fishCntArr[i] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
     static void dfs() {
-//        System.out.println("--현재 위치--");
-//        for (int[] arr : board) {
-//            System.out.println(Arrays.toString(arr));
-//        }
-//        System.out.println("거리 = " + distance);
-//        System.out.println("row = " + row);
-//        System.out.println("col = " + col);
-//        System.out.println("방문 상태");
-//        for (boolean[] arr : visited) {
-//            System.out.println(Arrays.toString(arr));
-//        }
-//        System.out.println("방향 상태");
-//        for (int[] arr : dirBoard) {
-//            System.out.println(Arrays.toString(arr));
-//        }
-
+        if (distance > min || checkFishes() == false) {
+            back();
+            return;
+        }
 
         visited[row][col] = true;
 
         int afterRow;
         int afterCol;
 
-        if (board[row][col] > 0 && board[row][col] < sharkSize) {
-            fishes.add(new Fish(row, col, distance));
+        if ((board[row][col] > 0 && board[row][col] < sharkSize) && board[row][col] != 9) {
+            fishes.add(new Fish(row, col, distance, board[row][col]));
+            min = Math.min(min, distance);
             back();
             return;
         }
-
+        System.out.println("-----");
 
         for (int i = 0; i < 4; i++) {
             afterRow = row + rowDir[i];
             afterCol = col + colDir[i];
+
             if (afterRow > n || afterCol > n || afterRow < 1 || afterCol < 1) {
                 continue;
             }
@@ -146,13 +139,29 @@ public class Ex_16236 {
                 col = afterCol;
                 dirBoard[afterRow][afterCol] = i;
                 distance++;
+                for (int m = 1; m <= n; m++) {
+                    for (int z = 1; z <= n; z++) {
+                        if (visited[m][z] == false) {
+                            System.out.print(0 + " ");
+                        } else {
+                            System.out.print(1 + " ");
+                        }
+                    }
+                    System.out.println();
+                }
+                System.out.println("distance = " + distance);
                 dfs();
             }
         }
+        System.out.println("-------");
         back();
     }
+
     static void back() {
-        if (dirBoard[row][col] == -1){ visited[row][col] = false; return;}
+        if (dirBoard[row][col] == -1) {
+            visited[row][col] = false;
+            return;
+        }
 
         visited[row][col] = false;
         sharkDir = (dirBoard[row][col] + 2) % 4; // 상어의 방향을 반대 방향으로 돌린다
@@ -161,15 +170,17 @@ public class Ex_16236 {
         distance--;
     }
 
-    static class Fish{
+    static class Fish {
         int row;
         int col;
         int distance;
+        int size;
 
-        Fish(int row, int col, int distance) {
+        Fish(int row, int col, int distance, int size) {
             this.row = row;
             this.col = col;
             this.distance = distance;
+            this.size = size;
         }
     }
 }
