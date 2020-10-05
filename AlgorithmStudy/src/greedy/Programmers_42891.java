@@ -1,3 +1,5 @@
+package greedy;
+
 // 무지의 먹방 라이브
 public class Programmers_42891 {
     public static void main(String[] args) {
