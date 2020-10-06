@@ -1,3 +1,6 @@
+package etc;
+
+//주식가격
 public class Programmers_42584 {
     public int[] solution(int[] prices) {
         int[] answer = new int[prices.length];
