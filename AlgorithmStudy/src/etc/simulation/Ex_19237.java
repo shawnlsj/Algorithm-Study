@@ -1,3 +1,5 @@
+package etc.simulation;
+
 import com.sun.org.apache.regexp.internal.RE;
 
 import java.io.BufferedReader;

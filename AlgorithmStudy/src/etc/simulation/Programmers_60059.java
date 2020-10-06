@@ -1,4 +1,4 @@
-//자물쇠와 열쇠
+package etc.simulation;//자물쇠와 열쇠
 
 import java.util.Arrays;
 
@@ -15,13 +15,13 @@ public class Programmers_60059 {
     public static void main(String[] args) {
         Programmers_60059 p = new Programmers_60059();
         int[][] k = {
-                {0, 1, 1},
-                {1, 1, 0},
-                {0, 1, 1}
+                {1, 0, 1},
+                {1, 1, 1},
+                {0, 0, 0}
         };
         int[][] l = {
-                {1, 1, 0},
-                {0, 1, 1},
+                {1, 1, 1},
+                {0, 0, 1},
                 {0, 1, 1},
         };
         System.out.println(p.solution(k,l));
@@ -79,6 +79,18 @@ public class Programmers_60059 {
 
     void dfs(int rootDir, int dir) {
         if (answer) return;
+        for (int[] z : key) {
+            System.out.println(Arrays.toString(z));
+        }
+        System.out.println("rootDir = " + rootDir);
+        System.out.println("dir = " + dir);
+        System.out.println("--");
+        if (keyCnt == lockCnt) {
+            if (checkClockWise(key)) {
+                answer = true;
+            }
+            return;
+        }
 
         switch (dir) {
             case 0:
@@ -95,16 +107,7 @@ public class Programmers_60059 {
                 break;
         }
 
-        if (keyCnt == lockCnt) {
-            for (int[] a : key) {
-                System.out.println(Arrays.toString(a));
-            }
-            System.out.println("--");
-            if (checkClockWise(key)) {
-                answer = true;
-                return;
-            }
-        }
+
 
         if (keyCnt < lockCnt) {
             return;
@@ -112,7 +115,6 @@ public class Programmers_60059 {
 
         int[][] copy = new int[key.length][key.length];
         int copyKeyCnt = keyCnt;
-        int copyLockCnt = lockCnt;
 
         moveKeyToArr(key, copy);
 
@@ -121,30 +123,44 @@ public class Programmers_60059 {
             if (i == (rootDir + 2) % 4 || i == (dir + 2) % 4) {
                 continue;
             }
-
+            System.out.println("호출부");
+            for (int[] z : key) {
+                System.out.println(Arrays.toString(z));
+            }
+            System.out.println("rootDir 호출= " + rootDir);
+            System.out.println("i = " + i);
+            System.out.println("호출부 끝 ----");
             dfs(rootDir, i);
             moveKeyToArr(copy, key);
             keyCnt = copyKeyCnt;
         }
     }
-    void checkUpDown() {
+    boolean checkUpDown() {
         int[][] keyCopy = new int[key.length][key.length];
         moveKeyToArr(key, keyCopy);
-        keyCopy = moveUp(key);
-        if (keyCnt == lockCnt) {
-            if (checkClockWise(keyCopy)) {
-                answer = true;
-                return;
-            }
-        }
-        keyCopy = moveDown(key);
-        if (keyCnt == lockCnt) {
-            if (checkClockWise(keyCopy)) {
-                answer = true;
-                return;
+
+        for (int i = 0; i < key.length - 1; i++) {
+            keyCopy = moveUp(keyCopy);
+            if (keyCnt == lockCnt) {
+                if (checkClockWise(keyCopy)) {
+                    answer = true;
+                    return true;
+                }
             }
         }
 
+        moveKeyToArr(key, keyCopy);
+
+        for (int i = 0; i < key.length - 1; i++) {
+            keyCopy = moveDown(keyCopy);
+            if (keyCnt == lockCnt) {
+                if (checkClockWise(keyCopy)) {
+                    answer = true;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     boolean checkClockWise(int[][] key) {
         int[][] arr;
@@ -159,9 +175,11 @@ public class Programmers_60059 {
                 keyCopy = turnClockwise(keyCopy);
                 continue;
             }
+            System.out.println("clock--");
             for (int[] a : arr) {
                 System.out.println(Arrays.toString(a));
             }
+            System.out.println("otherwise--");
             return true;
         }
         return false;
@@ -173,25 +191,59 @@ public class Programmers_60059 {
         moveKeyToArr(key, arr);
         moveKeyToArr(arr, copy);
 
+        //아래로 움직인다
         for (int k = 0; k < 4; k++) {
             for (int i = 0; i < n - 1; i++) {
                 for (int j = 0; j < n - 1; j++) {
-                    if (isEqual(arr)) {
-                        return true;
-                    }
+                    if (isEqual(arr)) return true;
                     arr = moveRight(arr);
                 }
-                if (isEqual(arr)) {
-                    return true;
+                if (isEqual(arr)) return true;
+
+                moveKeyToArr(copy, arr); //arr 원상 복귀
+
+                for (int j = 0; j < n - 1; j++) {
+                    if (isEqual(arr)) return true;
+                    arr = moveLeft(arr);
                 }
+
+                if (isEqual(arr)) return true;
                 moveKeyToArr(copy, arr);
                 arr = moveDown(arr);
+                moveKeyToArr(arr, copy);
             }
             arr = new int[n][n];
             key = turnClockwise(key);
             moveKeyToArr(key, arr);
             moveKeyToArr(arr, copy);
+        }
 
+
+        //위로 움직인다
+        for (int k = 0; k < 4; k++) {
+            for (int i = 0; i < n - 1; i++) {
+                for (int j = 0; j < n - 1; j++) {
+                    if (isEqual(arr)) return true;
+                    arr = moveRight(arr);
+                }
+                if (isEqual(arr)) return true;
+
+                moveKeyToArr(copy, arr); //arr 원상 복귀
+
+                for (int j = 0; j < n - 1; j++) {
+                    if (isEqual(arr)) return true;
+                    arr = moveLeft(arr);
+                }
+
+                if (isEqual(arr)) return true;
+                moveKeyToArr(copy, arr);
+                arr = moveUp(arr);
+                moveKeyToArr(arr, copy);
+            }
+            arr = new int[n][n];
+            key = turnClockwise(key);
+            moveKeyToArr(key, arr);
+            moveKeyToArr(arr, copy);
         }
         return false;
     }
