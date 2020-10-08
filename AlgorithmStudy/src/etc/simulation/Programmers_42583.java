@@ -1,7 +1,6 @@
-import java.lang.reflect.Array;
+package etc.simulation;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Programmers_42583 {
     public static void main(String[] args) {
@@ -57,4 +56,6 @@ public class Programmers_42583 {
             this.distance = 1;
         }
     }
+
+
 }
