@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Permutation {
@@ -32,7 +33,7 @@ public class Permutation {
     }
 
     static void dfs(int x) {
-        deque.add(x);
+        deque.addLast(x);
         depth++;
         visited[x] = true;
 
@@ -48,14 +49,13 @@ public class Permutation {
             if (visited[i]) continue;
             dfs(i);
         }
-
         clear(x);
         return;
     }
 
-    static int clear(int x) {
+    static void clear(int x) {
         depth--;
         visited[x] = false;
-        return deque.removeLast();
+        deque.removeLast();
     }
 }

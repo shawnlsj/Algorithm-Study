@@ -1,3 +1,5 @@
+package etc.simulation;
+
 import java.util.Arrays;
 
 public class Programmers_68645 {

@@ -37,8 +37,24 @@ public class Programmers_62048 {
         }
         System.out.println(System.currentTimeMillis() - start);
 
-        System.out.println("wh = " + wh);
-        System.out.println("gcd = " + gcd);
         return wh - (width + height - gcd);
+    }
+
+    public long solution2(int w, int h) {
+        long wh = (long)w * (long)h;
+        int gcd = 0;
+
+        int a = w;
+        int b = h;
+        while (true) {
+            int c = a % b;
+            if (c == 0) {
+                gcd = b;
+                break;
+            }
+            a = b;
+            b = c;
+        }
+        return wh - (w + h - gcd) ;
     }
 }
