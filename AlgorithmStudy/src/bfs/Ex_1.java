@@ -3,7 +3,7 @@ package bfs;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
-import util.Queue;
+import util.MyQueue;
 public class Ex_1 {
 	public static void main(String[] args) {
 
@@ -29,7 +29,7 @@ public class Ex_1 {
 	}
 
 	static void bfs(Node rootNode) {
-		Queue<Node> queue = new Queue<Node>();
+		MyQueue<Node> queue = new MyQueue<Node>();
 
 		queue.add(rootNode);
 		rootNode.isVisited = true;
@@ -40,14 +40,14 @@ public class Ex_1 {
 			Node removedNode = queue.remove();
 			System.out.println(removedNode.getValue());
 			
-			// »©³½ ³ëµåÀÇ ÀÚ½Ä ³ëµå ¸®½ºÆ®¸¦ ¿À¸§Â÷¼ø Á¤·Ä
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			removedNode.nodeList.sort(new Comparator<Node>() {
 				public int compare(Node node, Node node2) {
 					return node.getValue() - node2.getValue();
 				}
 			});
 
-			// »©³½ ³ëµåÀÇ ÀÚ½Ä ³ëµå¸¦ ÀüºÎ Å¥¿¡ Ãß°¡
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ Å¥ï¿½ï¿½ ï¿½ß°ï¿½
 			for (int i = 0; i < removedNode.nodeList.size(); i++) {
 				Node childNode = removedNode.nodeList.get(i);
 				if (!childNode.isVisited) {

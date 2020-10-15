@@ -2,7 +2,7 @@ package util;
 
 import java.util.NoSuchElementException;
 
-public class Queue<T> {
+public class MyQueue<T> {
 	
 	@SuppressWarnings("hiding")
 	private class Node<T> {
