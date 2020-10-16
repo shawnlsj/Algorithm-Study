@@ -1,3 +1,5 @@
+package etc.simulation;
+
 import java.util.Deque;
 import java.util.LinkedList;
 
