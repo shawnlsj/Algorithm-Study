@@ -1,5 +1,3 @@
-package etc.simulation;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,13 +9,16 @@ public class Programmers_60061 {
         Programmers_60061 p = new Programmers_60061();
         int n = 5;
         int[][] build_frame = {
+                {0, 0, 0, 1},
                 {2, 0, 0, 1},
+                {4, 0, 0, 1},
+                {0, 1, 1, 1},
                 {1, 1, 1, 1},
                 {2, 1, 1, 1},
-                {2,0,0,0},
-                {2,1,1,0},
-                {2,0,0,0},
-                {1,1,1,0}
+                {3, 1, 1, 1},
+                {2, 0, 0, 0},
+                {1, 1, 1, 0},
+                {2, 2, 0, 1}
         };
         System.out.println(Arrays.deepToString(p.solution(n, build_frame)));
     }
@@ -116,7 +117,7 @@ public class Programmers_60061 {
     }
 
     boolean isDeletable(Node node, int x) {
-        //기둥 삭제
+        // 0 기둥 1 보
         if (x == 0) {
             Node upNode = board[node.row + 1][node.col];
             if (!upNode.isConnectedLeft && !upNode.isConnectedRight) {
@@ -134,13 +135,11 @@ public class Programmers_60061 {
                     return true;
                 }
             } else if (upNode.isConnectedLeft && upNode.isConnectedRight) {
-                if ((board[upNode.row][upNode.col-1].isConnectedDown ||board[upNode.row][upNode.col-1].isConnectedLeft) &&
-                        (board[upNode.row][upNode.col+1].isConnectedDown || board[upNode.row][upNode.col+1].isConnectedRight)) {
-                    return true;
+                if (!board[upNode.row][upNode.col-1].isConnectedLeft && !board[upNode.row][upNode.col-1].isConnectedDown) {
+                    return false;
                 }
-                return false;
+                return true;
             }
-            // 보 삭제
         } else {
             if (checkNode(node) && checkRightNode(node)) {
                 return true;
