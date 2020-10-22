@@ -8,7 +8,6 @@ public class Combination {
 
     static int n; // nCr 에서 n
     static int r; // nCr 에서 r
-    static int cnt = 0; // 현재까지 뽑은 요소의 수를 카운트할 변수
     static LinkedList<Integer> combinations = new LinkedList<>(); // 뽑은 요소를 저장할 리스트
 
     public static void main(String[] args) throws Exception {
@@ -29,27 +28,23 @@ public class Combination {
     }
     static void dfs(int x){
 
-        if(x + (r - (cnt+1))> n) return;
+        if(x + (r - (combinations.size()+1))> n) return;
 
         combinations.add(x);
-        cnt++;
 
         //요소를 r개만큼 뽑았으면 조합을 출력
-        if (cnt == r) {
+        if (combinations.size() == r) {
             for (int i = 0; i < r; i++) {
                 System.out.print(combinations.get(i)+" ");
             }
             System.out.println();
             combinations.removeLast();
-            cnt--;
             return;
         }
 
         for (int i = x + 1; i <= n; i++) {
             dfs(i);
         }
-
-        cnt--;
         combinations.removeLast();
     }
 }
