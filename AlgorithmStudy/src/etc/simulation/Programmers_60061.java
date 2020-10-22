@@ -41,7 +41,7 @@ public class Programmers_60061 {
             int x = build_frame[i][1];
             int a = build_frame[i][2];
             int b = build_frame[i][3];
-            
+
             Node node = board[x][y];
             // a 0 기둥 1 보
             // b 0 삭제 1 설치
@@ -52,7 +52,7 @@ public class Programmers_60061 {
                         node.isConnectedUp = false;
                         board[x + 1][y].isConnectedDown = false;
                     }
-                    
+
                     //기둥 설치
                 } else if (b == 1) {
                     if (isCreatable(node, 0)) {
@@ -110,8 +110,8 @@ public class Programmers_60061 {
             }
         } else {
             if (node.isConnectedDown ||
-                    (board[node.row][node.col + 1].isConnectedDown) ||
-                    (board[node.row][node.col + 1].isConnectedRight)) {
+                    board[node.row][node.col + 1].isConnectedDown ||
+                    (node.isConnectedLeft && board[node.row][node.col + 1].isConnectedRight)) {
                 return true;
             }
         }
@@ -122,45 +122,56 @@ public class Programmers_60061 {
         // 0 기둥 1 보
         if (x == 0) {
             Node upNode = board[node.row + 1][node.col];
-                if (!upNode.isConnectedLeft && !upNode.isConnectedRight && upNode.isConnectedUp) {
+            if (!upNode.isConnectedLeft && !upNode.isConnectedRight) {
+                if (upNode.isConnectedUp) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }else if (upNode.isConnectedLeft && !upNode.isConnectedRight) {
+                if (board[upNode.row][upNode.col - 1].isConnectedDown) {
+                    return true;
+                }
+            }else if (upNode.isConnectedRight && !upNode.isConnectedLeft) {
+                if (board[upNode.row][upNode.col + 1].isConnectedDown) {
+                    return true;
+                }
+            } else if (upNode.isConnectedLeft && upNode.isConnectedRight) {
+                if (!board[upNode.row][upNode.col-1].isConnectedLeft && !board[upNode.row][upNode.col-1].isConnectedDown) {
                     return false;
                 }
-                if (upNode.isConnectedLeft && !upNode.isConnectedRight) {
-                    if (board[upNode.row][upNode.col - 1].isConnectedLeft ||
-                            board[upNode.row][upNode.col - 1].isConnectedDown ) {
-                        return true;
-                    }
-                }
-                // ㅣ
-                //  ㅡ
-                if (upNode.isConnectedRight && !upNode.isConnectedLeft) {
-                    if (board[upNode.row][upNode.col + 1].isConnectedRight ||
-                            board[upNode.row][upNode.col + 1].isConnectedDown ) {
-                        return true;
-                    }
-                }
-
-                if (upNode.isConnectedLeft && upNode.isConnectedRight) {
-                    if ( (board[upNode.row][upNode.col - 1].isConnectedLeft || board[upNode.row][upNode.col - 1].isConnectedDown) &&
-                            (board[upNode.row][upNode.col + 1].isConnectedRight || board[upNode.row][upNode.col + 1].isConnectedDown)) {
-                        return true;
-                    }
-                }
+                return true;
+            }
         } else {
-            // 보 삭제
-            Node rightNode = board[node.row][node.col + 1];
-            if (node.isConnectedDown) {
-                if (board[node.row][node.col + 1].isConnectedDown || board[node.row][node.col + 1].isConnectedRight) {
-                    return true;
-                }
-            } else if (node.isConnectedLeft) {
-                if ((board[node.row][node.col - 1].isConnectedDown || board[node.row][node.col - 1].isConnectedLeft)&&
-                        (board[node.row][node.col + 1].isConnectedDown || board[node.row][node.col + 1].isConnectedRight)) {
-                    return true;
-                }
+            if (checkNode(node) && checkRightNode(node)) {
+                return true;
             }
         }
         return false;
+    }
+    boolean checkNode(Node node) {
+        if (node.isConnectedUp || node.isConnectedLeft) {
+            if (node.isConnectedDown || (node.isConnectedLeft && board[node.row][node.col - 1].isConnectedDown)) {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    boolean checkRightNode(Node node) {
+        Node rightNode = board[node.row][node.col + 1];
+        if (rightNode.isConnectedUp || rightNode.isConnectedRight) {
+            if (rightNode.isConnectedDown ||
+                    (rightNode.isConnectedRight && board[rightNode.row][rightNode.col + 1].isConnectedDown)) {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
     class Node {
