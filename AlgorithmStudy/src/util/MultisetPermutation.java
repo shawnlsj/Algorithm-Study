@@ -3,18 +3,17 @@ package util;
 import java.util.LinkedList;
 
 public class MultisetPermutation {
-    static int[] arr;
-    static String[] strArr;
-    static int depth;
-    static int length;
-    static int[] countArr;
-
-    static LinkedList<Integer> deque;
+    static int[] arr; // 각 요소의 개수
+    static String[] strArr; // 요소의 값
+    static int length; // 요소 개수의 총합
+    static int[] countArr; // 요소가 몇 번 사용되었는지 기록할 배열
+    static LinkedList<Integer> deque; // 요소를 저장할 때 사용할 덱
 
     public static void main(String[] args) {
         arr = new int[]{3, 2};
+        strArr = new String[]{"a", "b"}; // a가 3개 b가 2개 일 때
         countArr = new int[arr.length];
-        strArr = new String[]{"a", "b"};
+
 
         for (int i = 0; i < arr.length; i++) {
             length += arr[i];
@@ -33,17 +32,15 @@ public class MultisetPermutation {
     }
 
     static void dfs(int x) {
-        depth++;
         deque.add(x);
         countArr[x]--;
 
-        if (length == depth) {
+        if (length == deque.size() ) {
             for (int a : deque) {
                 System.out.print(strArr[a] + " ");
             }
             System.out.println();
 
-            depth--;
             countArr[deque.removeLast()]++;
             return;
         }
@@ -52,8 +49,6 @@ public class MultisetPermutation {
             if (countArr[i] == 0) continue;
             dfs(i);
         }
-
-        depth--;
         countArr[x]++;
         deque.removeLast();
         return;
