@@ -2,6 +2,7 @@ package etc.simulation;
 
 import java.util.*;
 
+// 오픈 채팅방
 public class Programmers_42888 {
     public static void main(String[] args) {
         new Programmers_42888().solution(

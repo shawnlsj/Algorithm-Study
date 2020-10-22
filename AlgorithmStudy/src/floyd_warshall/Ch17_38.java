@@ -1,9 +1,15 @@
+package floyd_warshall;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+// 플로이드 워셜로 풀이가 가능한 이유
+// 1. n번 학생의 등수를 확정짓기 위해선 n번 학생은 모든 학생과 비교가 가능해야 한다
+// 2. 비교가 가능하다는 것은 -> x번 노드에서 n번 노드로 가는 경로나 반대의 경로가 존재한다는 것
+// 3. 경로가 존재하는 지 판단하는 방법 -> [플로이드 워셜]을 이용해 x->n or n->x 가 INF 인지 아닌지 구한다
 public class Ch17_38 {
     static boolean[] visited;
     public static void main(String[] args) throws Exception {
