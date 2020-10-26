@@ -1,66 +1,63 @@
 package etc.simulation;
 
-import binary_serach.Programmers_43238;
-
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+//매칭 점수
 public class Programmers_42893 {
     public static void main(String[] args) {
         Programmers_42893 p = new Programmers_42893();
-        String word = "Muzi";
+        String word = "blind";
         String[] pages = new String[]
-                {"<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://careers.kakao.com/interview/list\"/>\n</head>  \n<body>\n<a href=\"https://programmers.co.kr/learn/courses/4673\"></a>#!MuziMuzi!)jayg07con&&\n\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://www.kakaocorp.com\"/>\n</head>  \n<body>\ncon%\tmuzI92apeach&2<a href=\"https://hashcode.co.kr/tos\"></a>\n\n\t^\n</body>\n</html>"}
-                ;
+                {"<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://a.com\"/>\n</head>  \n<body>\nBlind Lorem Blind ipsum dolor Blind test sit amet, consectetur adipiscing elit. \n<a href=\"https://b.com\"> Link to b </a>\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://b.com\"/>\n</head>  \n<body>\nSuspendisse potenti. Vivamus venenatis tellus non turpis bibendum, \n<a href=\"https://a.com\"> Link to a </a>\nblind sed congue urna varius. Suspendisse feugiat nisl ligula, quis malesuada felis hendrerit ut.\n<a href=\"https://c.com\"> Link to c </a>\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://c.com\"/>\n</head>  \n<body>\nUt condimentum urna at felis sodales rutrum. Sed dapibus cursus diam, non interdum nulla tempor nec. Phasellus rutrum enim at orci consectetu blind\n<a href=\"https://a.com\"> Link to a </a>\n</body>\n</html>"};
         System.out.println(p.solution(word, pages));
     }
+
     public int solution(String word, String[] pages) {
         HashMap<String, Page> map = new HashMap<>();
 
         for (int i = 0; i < pages.length; i++) {
-            StringTokenizer stk = new StringTokenizer(pages[i]);
-            boolean isHeadTag = false;
-            boolean isMetaTag = false;
-            boolean isBodyTag = false;
+            String page = pages[i];
+            String url = "";
+            Pattern urlPattern = Pattern.compile("<meta property=\"og:url\" content=\"\\S+\"");
+            Matcher urlMatcher = urlPattern.matcher(page);
 
-            String siteName = "";
-            String linkToken = null;
-            while (stk.hasMoreTokens()) {
-                String token = stk.nextToken();
-                String lowerWord = word.toLowerCase();
-                String lowerToken = token.toLowerCase();
-                if (token.equals("<head>")) {
-                    isHeadTag = true;
+            if (urlMatcher.find()) {
+                url = urlMatcher.group();
+                url = url.replaceAll("(\\s|\\S)*content=\"", "");
+                url = url.replaceAll("\"", "");
+                if (map.get(url) == null) {
+                    map.put(url, new Page(i));
                 }
-                else if (isHeadTag && token.equals("<meta")) isMetaTag = true;
-                else if (isMetaTag && token.contains("content")) {
-                    siteName = token.substring(token.indexOf("\"") + 1, token.lastIndexOf("\""));
-                    if (map.get(siteName) == null) map.put(siteName, new Page(i));
-                    isMetaTag = false;
-                } else if (token.equals("<body>")) {
-                    isBodyTag = true;
-                } else if (isBodyTag && lowerToken.contains(lowerWord)) {
-                    lowerToken = lowerToken.replaceFirst(lowerWord, "");
-                    if (!lowerToken.contains(lowerWord)) {
-                        map.get(siteName).defaultScore++;
-                    }
-                } else if (linkToken != null) {
-                    if (token.charAt(token.length() - 1) == '>') {
-                        String linkSiteName = token.substring(token.indexOf("\"") + 1, token.lastIndexOf("\""));
-                        map.get(siteName).linkPages.add(linkSiteName);
-                    }
-                    linkToken = null;
-                } else if (token.equals("<a")) {
-                    linkToken = token;
+            }
+
+            Pattern linkPattern = Pattern.compile("<a href=\"\\S*\">");
+            Matcher linkMatcher = linkPattern.matcher(page);
+            while (linkMatcher.find()) {
+                String link = linkMatcher.group();
+                link = link.replaceAll("<a href=\"", "");
+                link = link.replaceAll("\">", "");
+                map.get(url).linkPages.add(link);
+            }
+
+            Pattern wordPattern = Pattern.compile("[a-zA-Z]*(?i)"+word+"[a-zA-Z]*");
+            Matcher wordMatcher = wordPattern.matcher(page);
+            while (wordMatcher.find()) {
+                if (wordMatcher.group().length() == word.length()) {
+                    map.get(url).defaultScore++;
                 }
             }
         }
-
         // 링크 점수 구하기
         Iterator<Map.Entry<String, Page>> it = map.entrySet().iterator();
         while (it.hasNext()) {
             Page page = it.next().getValue();
             for (int i = 0; i < page.linkPages.size(); i++) {
                 String linkSiteName = page.linkPages.get(i);
+                if (map.get(linkSiteName) == null) {
+                    continue;
+                }
                 map.get(linkSiteName).linkScore += (double) page.defaultScore / page.linkPages.size();
             }
         }
@@ -91,10 +88,11 @@ public class Programmers_42893 {
 
         return map.get(pageNameList.get(0)).pageIndex;
     }
-    class Page{
+
+    class Page {
         int pageIndex;
 
-        int defaultScore;
+        long defaultScore;
         double linkScore;
         ArrayList<String> linkPages = new ArrayList<>();
         double matchingScore;
