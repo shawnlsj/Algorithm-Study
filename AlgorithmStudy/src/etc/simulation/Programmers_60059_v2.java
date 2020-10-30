@@ -35,7 +35,7 @@ public class Programmers_60059_v2 {
         resetLock();
 
         for (int i = 0; i < 4; i++) {
-            // 현재 키를 이동만 사용해서 모든 경우의 수를 대입해본다
+            // 현재 키를 이동만 사용해서 가능한 모든 경우의 수를 대입해본다
             if (completeSearch()) {
                 answer = true;
                 break;
