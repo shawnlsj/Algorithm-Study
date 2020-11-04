@@ -1,4 +1,4 @@
-package etc.longest_incresing_subsequence;
+package etc.longest_increasing_subsequence;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

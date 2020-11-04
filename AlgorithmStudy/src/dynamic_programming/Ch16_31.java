@@ -36,7 +36,7 @@ public class Ch16_31 {
                     }
                     dp[k] = max + board[k][j];
                 }
-                for (int k = 1; k <= row; j++) {
+                for (int k = 1; k <= row; k++) {
                     tmp[k] = dp[k];
                 }
             }

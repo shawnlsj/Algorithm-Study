@@ -1,8 +1,7 @@
-package etc.longest_incresing_subsequence;
+package etc.longest_increasing_subsequence;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 

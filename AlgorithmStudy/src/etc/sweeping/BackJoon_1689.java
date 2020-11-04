@@ -39,6 +39,7 @@ public class BackJoon_1689 {
     static class Edge{
         int start;
         int end;
+
         Edge(int start, int end) {
             this.start = start;
             this.end = end;

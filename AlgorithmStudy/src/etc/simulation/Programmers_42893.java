@@ -6,9 +6,7 @@ import java.util.regex.Pattern;
 
 //매칭 점수
 public class Programmers_42893 {
-<<<<<<< HEAD
-  
-=======
+
     public static void main(String[] args) {
         Programmers_42893 p = new Programmers_42893();
         String word = "blind";
@@ -104,5 +102,4 @@ public class Programmers_42893 {
             this.pageIndex = pageIndex;
         }
     }
->>>>>>> origin/master
 }
