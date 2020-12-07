@@ -104,6 +104,7 @@ public class Programmers_60060 {
         }
         return sum;
     }
+
     class Node{
         boolean registered = false;
         Node[] nodes = new Node[26];
